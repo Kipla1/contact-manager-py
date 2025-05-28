@@ -82,7 +82,7 @@ class Contacts:
         conn = sqlite3.connect('contacts.db')
         c = conn.cursor()
         with conn:
-            c.execute("DELETE FROM contacts WHERE first_name = ?", (first_name))
+            c.execute("DELETE FROM contacts WHERE first_name = ?", (first_name,))
             print(f"{first_name} has been deleted from contacts successfully.")
         conn.commit()
         conn.close() 
@@ -93,7 +93,7 @@ class Contacts:
         conn = sqlite3.connect('contacts.db')
         c = conn.cursor()
         with conn:
-            c.execute("DELETE FROM contacts WHERE last_name = ?", (last_name))
+            c.execute("DELETE FROM contacts WHERE last_name = ?", (last_name,))
             print(f"{last_name} has been deleted from contacts successfully.")
         conn.commit()
         conn.close()    
@@ -104,7 +104,7 @@ class Contacts:
         conn = sqlite3.connect('contacts.db')
         c = conn.cursor()
         with conn:
-            c.execute("DELETE FROM contacts WHERE phone_number = ?", (phone_number))
+            c.execute("DELETE FROM contacts WHERE phone_number = ?", (phone_number,))
             print(f"{phone_number} has been deleted from contacts successfully.")
         conn.commit()
         conn.close()      
@@ -116,13 +116,70 @@ class Contacts:
         conn = sqlite3.connect('contacts.db')
         c = conn.cursor()
         with conn:
-            c.execute("DELETE FROM contacts WHERE email = ?", (email))
+            c.execute("DELETE FROM contacts WHERE email = ?", (email,))
             print(f"{email} has been deleted from contacts successfully.")
         conn.commit()
         conn.close()        
-        
-        
-        
-Contacts.add_contact("a", "b", 254721974408, "jawmes@gmail.com")     
+     
+    # filter contacts by name    
+    @classmethod
+    def filter_contacts_by_name(cls, first=None, last=None):
+        conn = sqlite3.connect('contacts.db')
+        c = conn.cursor()
+        results = []
+        if first and not last:
+            c.execute("SELECT * FROM contacts WHERE first_name = ?", (first,))
+            results = c.fetchall()
+            if results:
+                for row in results:
+                    print(row)
+            else:
+                print(f"No contacts found with first name '{first}'.")
+        elif last and not first:
+            c.execute("SELECT * FROM contacts WHERE last_name = ?", (last,))
+            results = c.fetchall()
+            if results:
+                for row in results:
+                    print(row)
+            else:
+                print(f"No contacts found with last name '{last}'.")
+        elif first and last:
+            c.execute("SELECT * FROM contacts WHERE first_name = ? AND last_name = ?", (first, last))
+            results = c.fetchall()
+            if results:
+                for row in results:
+                    print(row)
+            else:
+                print(f"No contacts found with first name '{first}' and last name '{last}'.")
+        else:
+            print("Please provide at least a first name or last name.")
+        if results:
+            if len(results) == 1:
+                print(f"Showing {len(results)} result.")
+            else:
+                print(f"Showing {len(results)} results.")
+        conn.close()
+    
+    # filter contacts by email     
+    @classmethod
+    def filter_contacts_by_email(cls, email):
+        conn = sqlite3.connect('contacts.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("SELECT * FROM contacts WHERE email = ?", (email,))
+            result = c.fetchall()
+        for row in result:
+            if len(result) == 1:
+             print(f"Showing {len(result)} result.")    
+            else:
+                print(f"Showing {len(result)} results.")
+                
+        conn.close()        
+# Contacts.add_contact("a", "b", 254721974408, "jawmes@gmail.com")  
+Contacts.add_contact("ddg", "carezon", 254721974408, "jawmes@gmail.com")  
+   
 # Contacts.delete_contact_by_fn("a")
 # Contacts.delete_contact_by_ln("b")
+# Contacts.filter_contacts_by_name("a")
+
+# Contacts.filter_contacts_by_email("jawmes@gmail.com")
