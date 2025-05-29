@@ -236,12 +236,74 @@ class Contacts:
             else:
                 print(f"Showing {len(result)} results.")
                 
-        conn.close()        
-# Contacts.add_contact("a", "b", 254721974408, "jawmes@gmail.com")  
-Contacts.add_contact("ddg", "carezon", 254721974408, "jawmes@gmail.com")  
-   
-# Contacts.delete_contact_by_fn("a")
-# Contacts.delete_contact_by_ln("b")
-# Contacts.filter_contacts_by_name("a")
+        conn.close()       
+        
+        
+    @classmethod
+    def clear_table(cls):
+        conn = sqlite3.connect('contacts.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("DROP TABLE")     
+            
+        conn.commit()
+        conn.close()    
+if __name__ == "__main__":
+    # Example usage (you can customize this part)
+    print("Contact Manager CLI")
+    print("Available actions: add, delete_fn, delete_ln, filter, update_fn, update_ln, filter_email, clear_table")
 
-# Contacts.filter_contacts_by_email("jawmes@gmail.com")
+    action = input("Enter action: ")
+
+    if action == "add":
+        first_name = input("First name: ")
+        last_name = input("Last name: ")
+        phone_number = int(input("Phone number: "))
+        email = input("Email: ")
+        Contacts.add_contact(first_name, last_name, phone_number, email)
+    elif action == "delete_fn":
+        first_name = input("First name to delete: ")
+        Contacts.delete_contact_by_fn(first_name)
+    elif action == "delete_ln":
+        last_name = input("Last name to delete: ")
+        Contacts.delete_contact_by_ln(last_name)
+    elif action == "delete_pn":
+        phone_number = int(input("Phone number to delete: "))
+        Contacts.delete_contact_by_pn(phone_number)
+    elif action == "delete_email":
+        email = input("Email to delete: ")
+        Contacts.delete_contact_by_email(email)
+    elif action == "filter":
+        first = input("First name to filter by (leave blank if not filtering by first name): ")
+        last = input("Last name to filter by (leave blank if not filtering by last name): ")
+        first = first if first else None
+        last = last if last else None
+        Contacts.filter_contacts_by_name(first, last)
+    elif action == "update_fn":
+        old_name = input("Old first name: ")
+        new_name = input("New first name: ")
+        Contacts.update_contact_by_firstname(old_name, new_name)
+    elif action == "update_ln":
+        old_name = input("Old last name: ")
+        new_name = input("New last name: ")
+        Contacts.update_contact_by_lastname(old_name, new_name)
+    elif action == "update_email":
+        old_email = input("Old email: ")
+        new_email = input("New email: ")
+        Contacts.update_contact_by_email(old_email, new_email)
+    elif action == "update_pn":
+        old_number = int(input("Old phone number: "))
+        new_number = int(input("New phone number: "))
+        Contacts.update_contact_by_phonenumber(old_number, new_number)
+    elif action == "filter_email":
+        email = input("Enter email to filter by: ")
+        Contacts.filter_contacts_by_email(email)
+    elif action == "clear_table":
+        yes_no = input("Are you sure you want to clear the table? This will delete all contacts. (y/n): ")
+        if yes_no.lower() == 'y':
+            Contacts.clear_table()
+            print("All contacts have been deleted and the table has been dropped.")
+        else:
+            print("Clear table action cancelled.")
+    else:
+        print("Invalid action.")
