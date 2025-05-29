@@ -159,6 +159,68 @@ class Contacts:
             else:
                 print(f"Showing {len(results)} results.")
         conn.close()
+        
+    # Update contact by first name (fn)
+    @classmethod
+    def update_contact_by_firstname(cls, old_name, new_name):
+        conn = sqlite3.connect('contacts.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("UPDATE contacts SET first_name = ? WHERE first_name = ? ", (new_name, old_name,))
+            if len(old_name) <= 1:
+                print(f"Contact with first name '{old_name}' has been changed to '{new_name}'")
+            else:
+                 print(f"Contacts with first_name '{old_name}' have been succesfully updated to '{new_name}'")
+            
+            
+        conn.commit()
+        conn.close()    
+
+    # Update contact by last name (ln)
+    @classmethod
+    def update_contact_by_lastname(cls, old_name, new_name):
+        conn = sqlite3.connect('contacts.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("UPDATE contacts SET last_name = ? WHERE last_name = ? ", (new_name, old_name,))
+            if len(old_name) <= 1:
+                print(f"Contact with last name '{old_name}' has been changed to '{new_name}'")
+            else:
+                 print(f"Contacts with flast name '{old_name}' have been succesfully updated to '{new_name}'")
+            
+            
+        conn.commit()
+        conn.close() 
+
+    # Update contact by email
+    @classmethod
+    def update_contact_by_email(cls, old_email, new_email):
+        conn = sqlite3.connect('contacts.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("UPDATE contacts SET email = ? WHERE femail = ? ", (new_email, old_email,))
+            if len(old_email) <= 1:
+                print(f"Contact with email previously: '{old_email}', has been changed to '{new_email}'")
+            else:
+                 print(f"Contacts with first_name '{old_email}' have been succesfully updated to '{new_email}'")
+            
+        conn.commit()
+        conn.close() 
+
+    # Update contact by phone_number(pn)
+    @classmethod
+    def update_contact_by_phonenumber(cls, old_number, new_number):
+        conn = sqlite3.connect('contacts.db')
+        c = conn.cursor()
+        with conn:
+            c.execute("UPDATE contacts SET phone_number = ? WHERE phone_number = ? ", (new_number, old_number,))
+            if len(old_number) <= 1:
+                print(f"Contact with phone number: '{old_number}', has been changed to '{new_number}'")
+            else:
+                 print(f"Contacts with phone numebrs: '{old_number}' have been succesfully updated to '{new_number}'")
+            
+        conn.commit()
+        conn.close() 
     
     # filter contacts by email     
     @classmethod
